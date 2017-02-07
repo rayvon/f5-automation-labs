@@ -36,7 +36,8 @@ Perform the following steps to complete this task:
    and find the ‘transId’ attribute. Save the value of this attribute
    in the ‘transaction\_id’ environment variable. Additionally notice
    that there are timeouts for both the submission of the transaction
-   and how long it should take to execute:
+   and how long it should take to execute. Be aware that after the
+   'timeoutSeconds' value, this transId will be silently removed:
 
    |image37|
    |image38|
@@ -86,3 +87,13 @@ Perform the following steps to complete this task:
 .. |image40| image:: /_static/image040.png
    :width: 6.37328in
    :height: 2.45058in
+
+.. warning:: When sending the Header ``X-F5-REST-Coordination-Id``, the
+   system assumes you want to add an entry in the transaction
+   queue. You MUST remove this header if you want to issue
+   transaction queue changes (like deleting an entry from the
+   queue, changing the order, commiting a transaction). If you
+   don't remove the header in that specific case, the system 
+   will send a 400 with the following type of error:
+   "message": "Transaction XXXXX operation .... is not allowed
+   to be added to transaction."
